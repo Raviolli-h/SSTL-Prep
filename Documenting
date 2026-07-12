@@ -1,0 +1,10 @@
+1.Weeks 1-2: Protocol Bridging and Flow Control:Target: SpaceWire (ECSS-E-ST-50-52C) to 
+
+AXI4-Stream.
+Terrestrial video pipelines rely on continuous backpressure via TREADY. In space payloads, you bridge directly to SpaceWire or SpaceFibre networks.
+
+Task: Study the ECSS-E-ST-50-52C standard. Deep dive into the Link Management FSM, focusing on the strict transition states between ErrorReset, Connecting, and Run.
+
+Deliverable: Write a synthesizable VHDL module bridging a native 8-bit SpaceWire receiver interface to a 32-bit AXI4-Stream master interface.
+
+Architectural Constraint: Your bridge must handle credit-based flow control (FCT tokens) dynamically. Defend how you prevent FIFO overflow on the AXI side when a disconnect occurs mid-packet without losing the current Earth Observation (EO) frame boundary.
