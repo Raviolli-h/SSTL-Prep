@@ -8,3 +8,34 @@ Task: Study the ECSS-E-ST-50-52C standard. Deep dive into the Link Management FS
 Deliverable: Write a synthesizable VHDL module bridging a native 8-bit SpaceWire receiver interface to a 32-bit AXI4-Stream master interface.
 
 Architectural Constraint: Your bridge must handle credit-based flow control (FCT tokens) dynamically. Defend how you prevent FIFO overflow on the AXI side when a disconnect occurs mid-packet without losing the current Earth Observation (EO) frame boundary.
+
+what I need to do: 
+ECSS-E-ST-50-52C (SpaceWire)
+
+Entities
+    Entity Top
+        SpaceWire (8-bit data, control bit, FCT signals)
+        AXI4-Stream (ACLK,TDATA,TVALID,TREADY,TLAST)
+        
+    Entity Link management FSM
+            3 states
+                ErrorReset
+                Connecting
+                Run
+    The Data Packer Entity 
+        Counter - should be a simple signal in data packer entity
+            from 0 to 3 to keep track of the bytes
+        8-bit to 32-bit Processor
+            Glues 4 x 8-bits
+
+
+
+
+
+Tripping points
+    Clock Domain Crossing (CDC)
+
+    Variable-Length Address
+
+    SEU Mitigation
+
