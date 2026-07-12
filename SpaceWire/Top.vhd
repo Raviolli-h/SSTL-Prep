@@ -34,14 +34,12 @@ Architecure Instantiation of Top_Level is
             -- port declaration here.
         );
     end component;
-    
+
     component Data_Packer is
         port(
             -- port declaration here.
         );
     end component;
-
-
 
 
 End Architecure;
