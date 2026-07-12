@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
     Entity Link_Management is
         port(
                 -- Global System Signals
-            clk            : in  std_logic;
+            clk            : in  std_logic; -- 200 MHZ
             n_reset        : in  std_logic;
 
             link_start     : in std_logic; 
@@ -24,21 +24,40 @@ Architecture RTL of Link_Management is
 type t_state is (ErrorReset, Connecting, Run);
 signal current_state : t_state ; 
 
+signal wait_signal : std_logic; -- 6.4 us delay
 
-Process (clk, n_reset)
+begin
+
+    process (clk)
+    begin
+        if rising_edge(clk) then
+
+        end if;
+    end process;
+
+
+FSM : Process (clk, n_reset)
 begin
     -- The standard synchronous clock edge check
     if n_reset = '1' then
-        rx_enable    <= '0'
-        link_active  <= '0'
-        state_debug  <= (others => '0')
+        rx_enable    <= '0';
+        link_active  <= '0';
+        state_debug  <= (others => '0');
     elsif rising_edge(clk) then 
 
 
         case current_state is
             when ErrorReset =>
-                -- Statements
+                rx_enable   <= '0';
+                link_active <= '0';
+                state_debug <= '(others => '0');
+                if wait_signal = '1' then
+                    current_state <= connecting;
+                else
+                    current_state <= ErrorReset;
+                end if;
             when Connecting => 
+
                 -- Statements
             when Run => -- Always include "others" to prevent latches
                 current_state <= IDLE;

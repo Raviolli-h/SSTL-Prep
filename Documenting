@@ -20,8 +20,11 @@ Entities
     Entity Link management FSM
             3 states
                 ErrorReset
+                    Handles the reset and errorwait safety zones
                 Connecting
+                    handles the ready, started, and connecting handshake phases
                 Run
+                    is the final state where high-ratedata transfer actually happens
     The Data Packer Entity 
         Counter - should be a simple signal in data packer entity
             from 0 to 3 to keep track of the bytes
