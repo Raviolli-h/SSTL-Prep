@@ -4,12 +4,49 @@ use ieee.numeric_std.all;
 
     Entity Link_Management is
         port(
-                
+                -- Global System Signals
+            clk            : in  std_logic;
+            n_reset        : in  std_logic;
+
+            link_start     : in std_logic; 
+            got_handskake  : in std_logic; 
+            link_error     : in std_logic; 
+
+            rx_enable      : out std_logic; -- Enables the Packer/FIFO pipeline
+            link_active    : out std_logic; -- High when in 'Run' state
+            state_debug    : out std_logic_vector(1 downto 0)
         );
     end entity;
 
 
 Architecture RTL of Link_Management is
 
+type t_state is (ErrorReset, Connecting, Run);
+signal current_state : t_state ; 
+
+
+Process (clk, n_reset)
+begin
+    -- The standard synchronous clock edge check
+    if n_reset = '1' then
+        rx_enable    <= '0'
+        link_active  <= '0'
+        state_debug  <= (others => '0')
+    elsif rising_edge(clk) then 
+
+
+        case current_state is
+            when ErrorReset =>
+                -- Statements
+            when Connecting => 
+                -- Statements
+            when Run => -- Always include "others" to prevent latches
+                current_state <= IDLE;
+            WHEN others => 
+                current_state <= ErrorReset;
+        end case;
+
+
+End process;
 
 End architecture;
