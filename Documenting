@@ -42,3 +42,47 @@ Tripping points
 
     SEU Mitigation
 
+
+1. ErrorReset (The Phone is Hung Up)
+What is happening: You are sitting in silence. Your phone is on the hook. You are not talking, and you are not listening.
+
+Outputs:
+rx_enable = '0' (The ear speaker is off—no data can enter).
+link_active = '0' (You are not in a call).
+
+How you leave: You get a command from the captain to start the link (link_start = '1'). This is like picking up the handset to dial. You immediately move to Connecting.
+
+
+2. Connecting (The Phone is Ringing)
+What is happening: You are dialing the number and shouting into the phone: "Hello? Hello? Is anyone there?" You are waiting to hear a voice on the other end.
+
+Outputs:
+
+rx_enable = '0' (Still off. You are only listening for a specific "Hello" greeting; you are not ready to stream real data yet).
+
+link_active = '0'.
+
+How you leave (Scenario A - Success): The other side answers and says, "Yes, I am here! Hello!" (got_handshake = '1'). You immediately move to Run.
+
+How you leave (Scenario B - Failure): The line rings for too long and nobody answers, or you decide to hang up (link_start = '0'). You drop back to ErrorReset.
+
+3. Run (The Conversation)
+What is happening: The call is successfully connected! Now, and only now, you can start sharing valuable information (streaming your high-speed camera or audio data).
+
+Outputs:
+
+rx_enable = '1' (Turn the speaker and microphone on! Let the data flow into the FIFO).
+
+link_active = '1' (Telemetry says: "We are actively talking!").
+
+rx_enable <= '1';
+link_active <= '1';
+if link_error = '1' or link_start = '0' then
+ we go to ErrorReset
+ 
+
+
+How you leave: Suddenly, there is massive static on the line, or the physical cable gets cut (link_error = '1'), or you hang up (link_start = '0'). You immediately drop the call and slam the phone down, returning directly to ErrorReset to keep the line safe.
+
+The Golden Rule of this FSM:
+If state is NOT Run, then rx_enable MUST be '0'. This is how you guarantee that random noise on an unplugged or unstable cable never gets processed as real data.

@@ -24,17 +24,6 @@ Architecture RTL of Link_Management is
 type t_state is (ErrorReset, Connecting, Run);
 signal current_state : t_state ; 
 
-signal wait_signal : std_logic; -- 6.4 us delay
-
-begin
-
-    process (clk)
-    begin
-        if rising_edge(clk) then
-
-        end if;
-    end process;
-
 
 FSM : Process (clk, n_reset)
 begin
@@ -51,16 +40,27 @@ begin
                 rx_enable   <= '0';
                 link_active <= '0';
                 state_debug <= '(others => '0');
-                if wait_signal = '1' then
+                if link_start = '1' then
                     current_state <= connecting;
                 else
                     current_state <= ErrorReset;
                 end if;
-            when Connecting => 
-
+            
+            when Connecting =>     
+                rx_enable <= '0';
+                link_active <= '0';
+                if got_handshake = '0' then
+                    current_state <= Run;
+                else
+                    current_state <= Connecting;
                 -- Statements
+            
             when Run => -- Always include "others" to prevent latches
-                current_state <= IDLE;
+                rx_enable <= '1';
+                link_active <= '1';
+                if link_error = '1' or link_start = '0' then
+                    current_state <= ErrorReset;
+                end if; 
             WHEN others => 
                 current_state <= ErrorReset;
         end case;
