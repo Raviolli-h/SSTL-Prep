@@ -55,13 +55,13 @@ begin
                     current_state <= Connecting;
                 -- Statements
             
-            when Run => -- Always include "others" to prevent latches
+            when Run => 
                 rx_enable <= '1';
                 link_active <= '1';
                 if link_error = '1' or link_start = '0' then
                     current_state <= ErrorReset;
                 end if; 
-            WHEN others => 
+            WHEN others => -- Always include "others" to prevent latches
                 current_state <= ErrorReset;
         end case;
 
