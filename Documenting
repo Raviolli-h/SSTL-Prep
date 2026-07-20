@@ -10,6 +10,7 @@ Deliverable: Write a synthesizable VHDL module bridging a native 8-bit SpaceWire
 
 what else is there left to do : 
 1. 3 missing architecture modulees modules 
+   
     Block A : Credit-Base Flow Control
         Small counter module that monitors FIFO Fill level
             When FIFO has room for +8 bytes, it sends a FCT pulse back out to the transmitter
@@ -24,4 +25,3 @@ what else is there left to do :
         Outputs to manage : TDATA, TVALID (Driven when FIFO is not emply), TREADY (input backpressure from receiver), and TLAST (Driven when the packet ends).
 
 
-        
